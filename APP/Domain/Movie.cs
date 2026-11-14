@@ -14,7 +14,7 @@ namespace APP.Domain
         [Required, StringLength(100)]
         public string Name { get; set; }
         public DateTime? ReleaseDate { get; set; }
-        public decimal TotalRevenue { get; set; }  
+        public decimal TotalRevenue { get; set; }
         public int DirectorId { get; set; }
         public Director Director { get; set; }
         public List<MovieGenre> MovieGenres { get; set; } = new();
@@ -24,6 +24,7 @@ namespace APP.Domain
         {
             get => MovieGenres.Select(movieGenreEntity => movieGenreEntity.GenreId).ToList();
 
-            set => MovieGenres = value.Select(genreId => new MovieGenre { GenreId = genreId}).ToList();
+            set => MovieGenres = value.Select(genreId => new MovieGenre { GenreId = genreId }).ToList();
         }
+    }
 }
