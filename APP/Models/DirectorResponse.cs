@@ -17,6 +17,6 @@ namespace APP.Models
 
         public string FullNameR { get; set; }
         public string isRetiredR { get; set; }
-        public List<string> MovieNamesR { get; set; }
+        public string MovieNamesR { get; set; }
     }
 }

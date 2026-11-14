@@ -18,6 +18,6 @@ namespace APP.Models
         
         public string RelaseDateR { get; set; }
         public string DirectorR { get; set; }
-        public List<string> GenreNamesR { get; set; }
+        public string GenreNamesR { get; set; }
     }
 }

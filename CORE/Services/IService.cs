@@ -16,7 +16,7 @@ namespace CORE.Services
 
         public TResponse Single(int id) => Query().SingleOrDefault(x => x.Id == id);
 
-        public TResponse Edit(int id);
+        public TRequest Edit(int id);
 
         public CommandResponse Add(TRequest request);
         public CommandResponse Update(TRequest request);

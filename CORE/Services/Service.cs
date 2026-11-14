@@ -38,7 +38,7 @@ namespace CORE.Services
             return new CommandResponse(true, message, id);
         }
 
-        protected CommandResponse Failure(string message = "Failed")
+        protected CommandResponse Error(string message = "Failed")
         {
             return new CommandResponse(false, message);
         }
