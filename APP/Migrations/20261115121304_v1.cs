@@ -19,7 +19,7 @@ namespace APP.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FirstName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    isRetired = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsRetired = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

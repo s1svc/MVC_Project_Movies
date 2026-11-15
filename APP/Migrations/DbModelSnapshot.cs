@@ -28,13 +28,13 @@ namespace APP.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsRetired")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("isRetired")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

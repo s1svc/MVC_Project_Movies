@@ -17,6 +17,16 @@ namespace APP.Services
         {
         }
 
+        // Includes the director's movies (needed by Remove's "has movies" check)
+        // and orders by last name, then first name.
+        protected override IQueryable<Director> DbQuery()
+        {
+            return base.DbQuery()
+                .Include(directorEnt => directorEnt.Movies)
+                .OrderBy(directorEnt => directorEnt.LastName)
+                .ThenBy(directorEnt => directorEnt.FirstName);
+        }
+
         public IQueryable<DirectorResponse> Query()
         {
             return DbQuery().Select(directorEnt => new DirectorResponse
@@ -25,9 +35,9 @@ namespace APP.Services
                 Id = directorEnt.Id,
                 FirstName = directorEnt.FirstName,
                 LastName = directorEnt.LastName,
-                isRetired = directorEnt.isRetired,
+                IsRetired = directorEnt.IsRetired,
                 FullNameR = directorEnt.FirstName + " " + directorEnt.LastName,
-                isRetiredR = directorEnt.isRetired ? "Retired" : "Not Retired",
+                IsRetiredR = directorEnt.IsRetired ? "Retired" : "Not Retired",
                 MovieNamesR = string.Join(", ", directorEnt.Movies.Select(x=> x.Name))
             });
         }
@@ -39,12 +49,12 @@ namespace APP.Services
                 return Error("Director exists!");
             var directorEnt = new Director
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                isRetired = request.IsRetired
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
+                IsRetired = request.IsRetired
             };
             DbAdd(directorEnt);
-            return Success(request.Id, "Director " + request.FirstName + " " + request.LastName + " added");
+            return Success(directorEnt.Id, "Director " + directorEnt.FirstName + " " + directorEnt.LastName + " added");
         }
 
         public DirectorRequest Edit(int id)
@@ -57,7 +67,7 @@ namespace APP.Services
                 Id = directoryEnt.Id,
                 FirstName = directoryEnt.FirstName,
                 LastName = directoryEnt.LastName,
-                IsRetired = directoryEnt.isRetired
+                IsRetired = directoryEnt.IsRetired
             };
         }
 
@@ -86,9 +96,9 @@ namespace APP.Services
             if (directorEnt == null)
                 return Error("Director not found.");
 
-            directorEnt.FirstName = request.FirstName;
-            directorEnt.LastName = request.LastName;
-            directorEnt.isRetired = request.IsRetired;
+            directorEnt.FirstName = request.FirstName.Trim();
+            directorEnt.LastName = request.LastName.Trim();
+            directorEnt.IsRetired = request.IsRetired;
             DbUpdate(directorEnt); 
 
             return Success(request.Id, "Director updated.");

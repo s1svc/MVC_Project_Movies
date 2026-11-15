@@ -52,7 +52,7 @@ namespace APP.Domain
             {
                 FirstName = "Wes",
                 LastName = "Anderson",
-                isRetired = false,
+                IsRetired = false,
                 Movies = new List<Movie> {
                 new Movie {
                     Name = "The Grand Budapest Hotel",
@@ -85,7 +85,7 @@ namespace APP.Domain
             {
                 FirstName = "Quentin",
                 LastName = "Tarantino",
-                isRetired = false,
+                IsRetired = false,
                 Movies = new List<Movie>
                 {
                     new Movie

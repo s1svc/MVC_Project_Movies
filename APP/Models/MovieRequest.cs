@@ -1,10 +1,6 @@
 ﻿using CORE.Domain;
-using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace APP.Models
 {
@@ -14,16 +10,22 @@ namespace APP.Models
         [StringLength(100, ErrorMessage = "{0} must be maximum {1} characters.")]
         public string Name { get; set; }
 
+        [DisplayName("Release Date")]
         public DateTime? ReleaseDate { get; set; }
 
+        // decimal? so that [Required] works (a plain decimal is never empty, it would be 0).
         [Required(ErrorMessage = "{0} is required.")]
-        public decimal TotalRevenue { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "{0} can't be negative.")]
+        [DisplayName("Total Revenue")]
+        public decimal? TotalRevenue { get; set; }
 
+        // int? so that [Required] works and "-- Select --" (empty value) fails validation.
         [Required(ErrorMessage = "{0} is required.")]
-        public int DirectorId { get; set; }
+        [DisplayName("Director")]
+        public int? DirectorId { get; set; }
 
         [Required(ErrorMessage = "At least one genre is required!")]
-        public List<int> GenreIds { get; set; } 
-    
+        [DisplayName("Genres")]
+        public List<int> GenreIds { get; set; }
     }
 }

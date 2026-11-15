@@ -16,7 +16,7 @@ namespace APP.Domain
         [Required, StringLength(100)]
         public string LastName { get; set; }
 
-        public bool isRetired { get; set; } 
+        public bool IsRetired { get; set; } 
         public List<Movie> Movies { get; set; } = new();
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APP.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20261114103939_v1")]
+    [Migration("20261115121304_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -31,13 +31,13 @@ namespace APP.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsRetired")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("isRetired")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

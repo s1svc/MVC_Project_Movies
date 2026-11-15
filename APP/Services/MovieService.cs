@@ -16,17 +16,29 @@ namespace APP.Services
         public MovieService(DbContext db) : base(db)
         {
         }
+
+        
+        protected override IQueryable<Movie> DbQuery()
+        {
+            return base.DbQuery()
+                .Include(movieEnt => movieEnt.Director)
+                .Include(movieEnt => movieEnt.MovieGenres)
+                .ThenInclude(movieGenreEnt => movieGenreEnt.Genre)
+                .OrderByDescending(movieEnt => movieEnt.ReleaseDate)
+                .ThenBy(movieEnt => movieEnt.Name);
+        }
         public IQueryable<MovieResponse> Query()
         {
             return DbQuery().Select(x => new MovieResponse
             {
                 Id = x.Id,
                 Name = x.Name, 
-                ReleaseDate = x.ReleaseDate ?? DateTime.MinValue,
+                ReleaseDate = x.ReleaseDate,
                 TotalRevenue = x.TotalRevenue,
                 DirectorId = x.DirectorId,
-                RelaseDateR = x.ReleaseDate.ToString(),
-                DirectorR = x.Director.FirstName + " " + x.Director.LastName,
+                ReleaseDateR = x.ReleaseDate.HasValue ? x.ReleaseDate.Value.ToString("dd.MM.yyyy") : string.Empty,
+                TotalRevenueR = x.TotalRevenue.ToString("C2"),
+                DirectorNameR = x.Director.FirstName + " " + x.Director.LastName,
                 GenreNamesR = string.Join("<br>", x.MovieGenres.OrderBy(x => x.Genre.Name).Select(x => x.Genre.Name))
             });
         }
@@ -36,10 +48,10 @@ namespace APP.Services
                 return Error("Movie exists.");
             var movieEnt = new Movie
             {
-                Name = request.Name,
+                Name = request.Name.Trim(),
                 ReleaseDate = request.ReleaseDate,
-                TotalRevenue = request.TotalRevenue,
-                DirectorId = request.DirectorId,
+                TotalRevenue = request.TotalRevenue ?? 0,
+                DirectorId = request.DirectorId ?? 0,
                 GenreIds = request.GenreIds
             };
             DbAdd(movieEnt);
@@ -77,22 +89,25 @@ namespace APP.Services
 
         public CommandResponse Update(MovieRequest request)
         {
-            if (DbQuery().Any(x => x.Id != request.Id && x.Name == request.Name))
+            if (DbQuery().Any(x => x.Id != request.Id && x.Name == request.Name.Trim()))
                 return Error("Movie exists with different ID.");
             var movieEnt = DbSingle(request.Id);
             if (movieEnt == null)
                 return Error("movie not found.");
 
-            if (!string.IsNullOrWhiteSpace(request.Name))
-                movieEnt.Name = request.Name.Trim();
-            if (request.ReleaseDate.HasValue)
-                movieEnt.ReleaseDate = request.ReleaseDate;
-            if (request.TotalRevenue > 0)
-                movieEnt.TotalRevenue = request.TotalRevenue;
-            if (request.DirectorId > 0)
-                movieEnt.DirectorId = request.DirectorId;
-            if (request.GenreIds != null && request.GenreIds.Any())
+            // Delete the old genre rows first, then set the new values and save.
+            if (request.GenreIds is not null)
+                DbRemove(movieEnt.MovieGenres);
+
+            movieEnt.Name = request.Name.Trim();
+            movieEnt.ReleaseDate = request.ReleaseDate;
+            if (request.TotalRevenue.HasValue)
+                movieEnt.TotalRevenue = request.TotalRevenue.Value;
+            if (request.DirectorId.HasValue)
+                movieEnt.DirectorId = request.DirectorId.Value;
+            if (request.GenreIds is not null)
                 movieEnt.GenreIds = request.GenreIds;
+            DbUpdate(movieEnt);
 
             return Success(movieEnt.Id, "Movie updated");
         }

@@ -9,15 +9,12 @@ namespace CORE.Models
 {
     public class CommandResponse : Record
     {
-        public bool IsSuccess { get; }
+        public bool IsSuccessful { get; }
         public string Message { get;  }
-        public CommandResponse( bool isSuccess, string message, int id = 0) : base(id)
+        public CommandResponse(bool isSuccessful, string message, int id = 0) : base(id)
         {
-            IsSuccess = isSuccess;
+            IsSuccessful = isSuccessful;
             Message = message;
-        }
-        public CommandResponse()
-        {
         }
     }
 }

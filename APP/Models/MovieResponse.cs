@@ -1,23 +1,30 @@
-﻿
-using CORE.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CORE.Domain;
+using System.ComponentModel;
 
 namespace APP.Models
 {
     public class MovieResponse : Record
     {
         public string Name { get; set; }
-        public DateTime ReleaseDate { get; set; }
+
+        [DisplayName("Release Date")]
+        public DateTime? ReleaseDate { get; set; }
+
+        [DisplayName("Total Revenue")]
         public decimal TotalRevenue { get; set; }
-        public List<int> GenreIds { get; set; }
+
         public int DirectorId { get; set; }
-        
-        public string RelaseDateR { get; set; }
-        public string DirectorR { get; set; }
+
+        [DisplayName("Release Date")]
+        public string ReleaseDateR { get; set; }
+
+        [DisplayName("Total Revenue")]
+        public string TotalRevenueR { get; set; }
+
+        [DisplayName("Director")]
+        public string DirectorNameR { get; set; }
+
+        [DisplayName("Genres")]
         public string GenreNamesR { get; set; }
     }
 }
