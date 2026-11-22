@@ -22,7 +22,7 @@
 
 @if (Model is not null)
 {
-    <form asp-action="Index" autocomplete="off">
+    <form asp-action="Index" method="get" autocomplete="off">
         <div class="@containerDivClass">
             <div class="row">
                 <div class="col-12 text-danger">
@@ -33,10 +33,14 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-10 text-success">
+                <div class="col-6 text-success">
                     @Model.Count() record(s) found.
                 </div>
-                <div class="col-2 text-end">
+                <div class="col-6 d-flex justify-content-end align-items-center gap-3">
+                    <div class="input-group w-auto">
+                        <label class="input-group-text" for="sortBy">Sort by</label>
+                        <select id="sortBy" name="sortBy" class="form-select w-auto" asp-items="ViewBag.SortBy" onchange="this.form.submit();"></select>
+                    </div>
                     <a asp-action="Create">Create</a>
                 </div>
             </div>
